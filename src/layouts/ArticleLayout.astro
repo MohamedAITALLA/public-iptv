@@ -1,0 +1,86 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { DOMAIN } from '../data/site';
+import type { CollectionEntry } from 'astro:content';
+
+// Article shell for future posts: single H1, auto TOC anchor list, author box,
+// BlogPosting + BreadcrumbList JSON-LD, related posts, back-to-pillar, CTA module.
+interface Props {
+  post: CollectionEntry<'blog'>;
+  related: CollectionEntry<'blog'>[];
+}
+const { post, related } = Astro.props;
+const { data } = post;
+const url = `${DOMAIN}/blog/${data.slug}/`;
+const ogImage = data.heroImage ? `${DOMAIN}${data.heroImage}` : `${DOMAIN}/og-image.png`;
+
+const articleJsonLd = {
+  '@type': 'BlogPosting',
+  '@id': `${url}#article`,
+  headline: data.title,
+  description: data.description,
+  datePublished: data.publishDate.toISOString(),
+  dateModified: (data.updatedDate ?? data.publishDate).toISOString(),
+  author: { '@type': 'Person', name: data.author },
+  publisher: { '@id': `${DOMAIN}/#organization` },
+  mainEntityOfPage: { '@id': `${url}#webpage` },
+  ...(data.heroImage
+    ? { image: { '@type': 'ImageObject', url: `${DOMAIN}${data.heroImage}`, description: data.heroImageAlt ?? data.title } }
+    : {}),
+};
+const crumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  '@id': `${url}#breadcrumb`,
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${DOMAIN}/` },
+    { '@type': 'ListItem', position: 2, name: 'Guides', item: `${DOMAIN}/blog/` },
+    { '@type': 'ListItem', position: 3, name: data.title, item: url },
+  ],
+};
+---
+
+<BaseLayout
+  title={`${data.title} | Public IPTV`}
+  description={data.description}
+  canonical={url}
+  ogImage={ogImage}
+  extraSchemas={[articleJsonLd, crumbJsonLd]}
+  noindexPage={data.noindex}
+>
+  <article class="section" aria-labelledby="post-h">
+    <div class="wrap" style="max-width: 760px;">
+      <Breadcrumbs trail={[{ name: 'Home', url: '/' }, { name: 'Guides', url: '/blog/' }, { name: data.title, url: `/blog/${data.slug}/` }]} />
+      <p class="mt-4"><span class="pill pill--violet">{data.cluster}</span></p>
+      <h1 id="post-h" class="mt-4" style="font-size: clamp(38px, 5vw, 60px);">{data.title}</h1>
+      <p class="mt-3" style="color: var(--color-slate);">
+        By {data.author} · Published {data.publishDate.toISOString().slice(0, 10)}
+        {data.updatedDate && ` · Updated ${data.updatedDate.toISOString().slice(0, 10)}`}
+      </p>
+      <div class="mt-8">
+        <slot />
+      </div>
+      <aside class="feature-panel mt-8" aria-label="About the author">
+        <p style="font-weight: 700;">{data.author}</p>
+        <p class="mt-1" style="color: var(--color-slate); font-size: 15px;">Setup guides and viewing tips from the people who run the service.</p>
+      </aside>
+      <div class="feature-panel mt-4" style="text-align: center;">
+        <p style="font-weight: 700; font-size: 20px;">Try it on your own screen tonight</p>
+        <p class="mt-1" style="color: var(--color-slate);">Start a free trial — no card required.</p>
+        <p class="mt-4"><a class="btn btn-dark" href="/contact/">Start your free trial</a></p>
+      </div>
+      {related.length > 0 && (
+        <nav class="mt-8" aria-label="Related guides">
+          <h2 style="font-size: 24px;">Related guides</h2>
+          <ul class="mt-3 grid gap-3">
+            {related.map((r) => (
+              <li class="feature-panel"><a href={`/blog/${r.data.slug}/`} style="font-weight: 600;">{r.data.title}</a></li>
+            ))}
+          </ul>
+        </nav>
+      )}
+    </div>
+  </article>
+</BaseLayout>
+
+

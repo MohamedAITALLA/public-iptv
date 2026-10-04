@@ -1,0 +1,263 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import EpgCard from '../components/EpgCard.astro';
+import FaqList from '../components/FaqList.astro';
+import LatestGuides from '../components/LatestGuides.astro';
+import { getCollection } from 'astro:content';
+import { DOMAIN, TITLE, DESCRIPTION } from '../data/site';
+import { FAQS } from '../data/faq';
+
+const guideCount = (await getCollection('blog', ({ data }) => !data.draft && !data.noindex)).length;
+
+const faqJsonLd = {
+  '@type': 'FAQPage',
+  '@id': `${DOMAIN}/#faq`,
+  mainEntity: FAQS.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<BaseLayout title={TITLE} description={DESCRIPTION} canonical={`${DOMAIN}/`} extraSchemas={[faqJsonLd]} hasGuides={guideCount > 0}>
+  <!-- Hero (two-column): H1 carries the primary keyword; conic ring on the CTA -->
+  <section class="section" aria-labelledby="hero-h" style="padding-top: 56px;">
+    <div class="wrap grid gap-10 md:grid-cols-2 items-center">
+      <div>
+        <p><span class="pill pill--violet">Free trial included</span></p>
+        <h1 id="hero-h" class="mt-4">Start your IPTV free trial today</h1>
+        <p class="mt-4" style="font-size: 20px; color: var(--color-slate);">
+          One IPTV subscription for live TV, sports, movies and more — in premium
+          4K quality on every screen you own. Set up in minutes, cancel anytime.
+        </p>
+        <div class="mt-6 flex flex-wrap items-center" style="gap: 12px;">
+          <span class="conic-ring"><a class="btn btn-dark" href="/contact/">Start free trial</a></span>
+          <a class="btn btn-ghost" href="/contact/">Contact us</a>
+        </div>
+        <ul class="check-list mt-6">
+          <li><span class="check" aria-hidden="true">✓</span><span><strong>Full access before you pay.</strong> <span>Test every channel and feature during the trial.</span></span></li>
+          <li><span class="check" aria-hidden="true">✓</span><span><strong>Works where you watch.</strong> <span>Any compatible M3U playlist player, on any screen.</span></span></li>
+          <li><span class="check" aria-hidden="true">✓</span><span><strong>Humans on support.</strong> <span>Real answers from the people who run the service.</span></span></li>
+        </ul>
+        <div class="mt-6 flex flex-wrap" style="gap: 8px;" aria-label="Highlights">
+          <span class="pill">4K Ultra HD</span>
+          <span class="pill">Multi-device</span>
+          <span class="pill">M3U playlists</span>
+        </div>
+      </div>
+      <EpgCard />
+    </div>
+  </section>
+
+  <!-- Capability strip: grayscale, mono label, no fake logos -->
+  <section aria-label="Service at a glance">
+    <div class="wrap" style="padding-bottom: 64px;">
+      <p class="kicker" style="text-align: center;">Service at a glance</p>
+      <ul
+        class="card mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-center"
+        style="font-weight: 700; font-size: 14px; font-family: var(--font-jakarta);"
+      >
+        <li class="flex items-center justify-center gap-2">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2" y="4" width="16" height="11" rx="2" stroke="#646464" stroke-width="1.5"></rect><path d="M8 18h4" stroke="#202020" stroke-width="1.5" stroke-linecap="round"></path></svg>
+          Premium 4K &amp; HD streams
+        </li>
+        <li class="flex items-center justify-center gap-2">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="6" y="2" width="8" height="16" rx="2" stroke="#646464" stroke-width="1.5"></rect><path d="M9 17.5h2" stroke="#202020" stroke-width="1.5" stroke-linecap="round"></path></svg>
+          Multi-device viewing
+        </li>
+        <li class="flex items-center justify-center gap-2">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2v4M10 14v4M2 10h4M14 10h4" stroke="#0091ff" stroke-width="1.5" stroke-linecap="round"></path><circle cx="10" cy="10" r="3" stroke="#202020" stroke-width="1.5"></circle></svg>
+          Free trial included
+        </li>
+        <li class="flex items-center justify-center gap-2">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 10a7 7 0 0 1 14 0" stroke="#646464" stroke-width="1.5" stroke-linecap="round"></path><circle cx="10" cy="13" r="2" fill="#202020"></circle></svg>
+          Human support
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Feature block A (plaster band): secondary #1 -->
+  <section id="features" class="section section-band" aria-labelledby="sub-h">
+    <div class="wrap grid gap-10 md:grid-cols-2 items-center">
+      <div>
+        <SectionHeader
+          kicker="Subscriptions"
+          title="IPTV subscription plans that fit how you watch"
+          sub="Whether you want a flexible monthly IPTV subscription or a longer plan with a lower per-month price, every option starts with the same full-access evaluation."
+        />
+        <div class="card mt-6" style="padding-top: 8px; padding-bottom: 8px;">
+          <details class="acc-row" open name="feat-a">
+            <summary><span>Full access from minute one</span></summary>
+            <p class="acc-body">Trial and paid plans unlock the same channel lineup, so what you test is exactly what you buy. No throttled demo bouquets, no hidden tiers.</p>
+          </details>
+          <details class="acc-row" name="feat-a">
+            <summary><span>Monthly billing, cancel anytime</span></summary>
+            <p class="acc-body">Choose monthly flexibility or a discounted longer IPTV subscription. Billing terms are confirmed in writing before anything is ever charged.</p>
+          </details>
+          <details class="acc-row" name="feat-a" style="border-bottom: none;">
+            <summary><span>One login, several screens</span></summary>
+            <p class="acc-body">Watch on the living-room TV while the family uses a tablet. Tell us how many simultaneous screens you need and we set the login up accordingly.</p>
+          </details>
+        </div>
+      </div>
+      <div class="card card--large">
+        <p class="kicker">Every subscription</p>
+        <ul class="check-list mt-4">
+          <li><span class="check">✓</span><span><strong>Full-access trial.</strong> <span>The whole lineup, not a demo bouquet.</span></span></li>
+          <li><span class="check">✓</span><span><strong>Several screens.</strong> <span>TV, tablet and phone on one login.</span></span></li>
+          <li><span class="check">✓</span><span><strong>Cancel anytime.</strong> <span>Monthly billing with no lock-in tricks.</span></span></li>
+          <li><span class="check">✓</span><span><strong>Human help.</strong> <span>Setup and buffering answers, personally.</span></span></li>
+        </ul>
+        <p class="mt-6"><a class="btn btn-dark" href="/contact/">Ask for a trial</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quality: dark feature panel (secondary #2) -->
+  <section class="section" aria-labelledby="quality-h">
+    <div class="wrap">
+      <div class="dark-panel" style="padding: clamp(40px, 6vw, 80px) clamp(24px, 5vw, 64px);">
+        <div class="grid gap-10 md:grid-cols-2 items-center">
+          <div>
+            <p class="kicker kicker--on-dark">Quality</p>
+            <h2 class="mt-4">IPTV premium: 4K, HD and SD quality that holds up live</h2>
+            <p class="mt-4" style="font-size: 20px;">A premium IPTV picture is about stability, not just resolution. Adaptive feeds step down gracefully when your connection dips, so the match never freezes at the worst moment.</p>
+            <ul class="check-list mt-6">
+              <li><span class="check" aria-hidden="true">✓</span><span><strong style="color: #fff;">True 4K where it matters.</strong> <span>Flagship sports and movie feeds in ultra-high definition on screens that support them.</span></span></li>
+              <li><span class="check" aria-hidden="true">✓</span><span><strong style="color: #fff;">Kind to slow lines.</strong> <span>Feeds drop to HD or SD automatically instead of freezing.</span></span></li>
+              <li><span class="check" aria-hidden="true">✓</span><span><strong style="color: #fff;">Accurate program guide.</strong> <span>An up-to-date EPG with reminders, so you never miss kickoff.</span></span></li>
+            </ul>
+          </div>
+          <div class="card" role="img" aria-label="Illustration of adaptive streaming quality switching between 4K, HD and SD">
+            <p class="kicker">Adaptive streaming</p>
+            <div class="mt-4 flex flex-col" style="gap: 8px;" aria-hidden="true">
+              <div style="border-radius: 12px; background: var(--color-ink-black); color: #fff; padding: 12px 16px; font-weight: 700; font-family: var(--font-jakarta);">4K Ultra HD <span class="pill--done" style="margin-left: 8px;">BEST</span></div>
+              <div style="border-radius: 12px; background: var(--color-mist); padding: 12px 16px; font-weight: 600;">Full HD 1080p</div>
+              <div style="border-radius: 12px; background: var(--color-mist); padding: 12px 16px; font-weight: 600;">SD · for slow connections</div>
+            </div>
+            <p class="mt-3" style="font-size: 13px; color: var(--color-slate);" aria-hidden="true">~25 Mbps per 4K screen · ~10 Mbps per HD screen</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Devices (secondary #3) -->
+  <section id="devices" class="section" aria-labelledby="devices-h" style="padding-top: 0;">
+    <div class="wrap">
+      <SectionHeader
+        kicker="Devices"
+        title="One account, every screen and M3U playlist player"
+        sub="If it runs a compatible M3U playlist player, it runs Public IPTV. Setup takes about five minutes with the login details from your welcome email. Your IPTV free trial works on all of them."
+      />
+      <ul class="grid grid-cols-2 md:grid-cols-4 gap-4" style="font-weight: 700; font-size: 15px; font-family: var(--font-jakarta);">
+        <li class="card card--tint" style="text-align: center;">Smart TVs<p class="mt-1" style="font-size: 13px; color: var(--color-slate); font-weight: 400; font-family: var(--font-inter);">Samsung · LG · Android TV apps</p></li>
+        <li class="card card--tint" style="text-align: center;">Streaming sticks<p class="mt-1" style="font-size: 13px; color: var(--color-slate); font-weight: 400; font-family: var(--font-inter);">Plug-in HDMI players</p></li>
+        <li class="card card--tint" style="text-align: center;">Phones &amp; tablets<p class="mt-1" style="font-size: 13px; color: var(--color-slate); font-weight: 400; font-family: var(--font-inter);">Android &amp; iOS player apps</p></li>
+        <li class="card card--tint" style="text-align: center;">Computers &amp; web<p class="mt-1" style="font-size: 13px; color: var(--color-slate); font-weight: 400; font-family: var(--font-inter);">Browser + desktop players</p></li>
+      </ul>
+      <p class="mt-4 text-center" style="color: var(--color-slate);">
+        Step-by-step setup guides for each device family are coming soon to our guides section.
+      </p>
+    </div>
+  </section>
+
+  <!-- How it works (plaster band, mono steps) -->
+  <section id="how" class="section section-band" aria-labelledby="how-h">
+    <div class="wrap">
+      <SectionHeader
+        kicker="Getting started"
+        title="Watching tonight in 3 steps"
+        sub="No dish, no engineer visit. Your IP TV subscription works over the internet connection you already have."
+      />
+      <ol class="grid gap-4 md:grid-cols-3">
+        <li class="card"><p class="kicker">Step 01</p><h3 class="mt-3">Start the free trial</h3><p class="mt-2" style="color: var(--color-slate);">Tell us where to send the trial login through the contact page. We reply to every message personally.</p></li>
+        <li class="card"><p class="kicker">Step 02</p><h3 class="mt-3">Install your player</h3><p class="mt-2" style="color: var(--color-slate);">Open any compatible IPTV player on your device and enter the M3U link or login from your welcome email.</p></li>
+        <li class="card"><p class="kicker">Step 03</p><h3 class="mt-3">Stay only if you love it</h3><p class="mt-2" style="color: var(--color-slate);">Keep the same login and continue on monthly or longer billing. Nothing to reinstall, nothing to reconfigure.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Content categories, generic (secondary #4) -->
+  <section class="section" aria-labelledby="cat-h">
+    <div class="wrap">
+      <SectionHeader
+        kicker="Channels"
+        title="The best IPTV for sports, movies, news and family"
+        sub="Channels organized the way people actually browse — by interest, not by number."
+      />
+      <ul class="grid gap-4 md:grid-cols-3" style="font-size: 16px;">
+        <li class="card"><h3>Live sports</h3><p class="mt-2" style="color: var(--color-slate);">Dedicated sports categories with EPG reminders for match nights and fight nights.</p></li>
+        <li class="card"><h3>Movies &amp; series</h3><p class="mt-2" style="color: var(--color-slate);">On-demand libraries plus round-the-clock movie channels for lean-back evenings.</p></li>
+        <li class="card"><h3>News &amp; documentaries</h3><p class="mt-2" style="color: var(--color-slate);">National and international news feeds alongside documentary channels.</p></li>
+        <li class="card"><h3>Kids &amp; family</h3><p class="mt-2" style="color: var(--color-slate);">Age-appropriate categories the whole household can browse safely.</p></li>
+        <li class="card"><h3>International</h3><p class="mt-2" style="color: var(--color-slate);">Channels from many countries for multilingual households and expats.</p></li>
+        <li class="card"><h3>Program guide</h3><p class="mt-2" style="color: var(--color-slate);">Electronic program guide on supported channels, so you always know what is on next.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Stats band: page-verifiable numbers only -->
+  <section class="section section-band" aria-labelledby="numbers-h" style="padding-top: 64px; padding-bottom: 64px;">
+    <div class="wrap">
+      <p class="kicker" style="text-align: center;">By the numbers</p>
+      <h2 id="numbers-h" class="mt-4" style="text-align: center; font-size: clamp(34px, 4vw, 48px);">This page, in numbers</h2>
+      <dl class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4" style="text-align: center;">
+        <div class="card"><dt class="stat-num">3</dt><dd class="stat-cap">steps to watching tonight</dd></div>
+        <div class="card"><dt class="stat-num">4</dt><dd class="stat-cap">device families supported</dd></div>
+        <div class="card"><dt class="stat-num">6</dt><dd class="stat-cap">content categories</dd></div>
+        <div class="card"><dt class="stat-num">10</dt><dd class="stat-cap">questions answered below</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- Why choose us (secondary #5) -->
+  <section class="section" aria-labelledby="why-h">
+    <div class="wrap">
+      <SectionHeader
+        kicker="Why Public IPTV"
+        title="An IPTV provider built on transparency"
+        sub="When people compare IPTV providers, the same complaints come up: hidden tiers, vanishing support, prices that change at checkout. We built against that list."
+      />
+      <ul class="grid gap-4 md:grid-cols-2" style="font-size: 16px;">
+        <li class="card"><h3>Ranked on merit, not hype</h3><p class="mt-2" style="color: var(--color-slate);">Independent roundups consistently rank the best IPTV providers on stability, support and honest billing. We publish our terms and refund policy before you pay — judge us against that bar.</p></li>
+        <li class="card"><h3>Support from people, not scripts</h3><p class="mt-2" style="color: var(--color-slate);">Real humans answer setup and buffering questions, with step-by-step fixes for your specific device and player.</p></li>
+        <li class="card"><h3>No lock-in tricks</h3><p class="mt-2" style="color: var(--color-slate);">Monthly billing, clear renewal reminders and a written refund policy. The biggest IPTV service providers keep customers with quality, not contracts — so do we.</p></li>
+        <li class="card"><h3>Legal and above board</h3><p class="mt-2" style="color: var(--color-slate);">Published contact email and terms on every page. If a provider cannot tell you who they are, that is your answer.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- FAQ (plaster band, native details) -->
+  <section id="faq" class="section section-band" aria-labelledby="faq-h">
+    <div class="wrap" style="max-width: 860px;">
+      <SectionHeader
+        kicker="FAQ"
+        title="Questions, answered"
+        sub="Straight answers from the team — including whether an IPTV subscription is right for you."
+      />
+      <FaqList faqs={FAQS} />
+    </div>
+  </section>
+
+  <!-- Final CTA: dark panel -->
+  <section class="section" aria-labelledby="cta-h">
+    <div class="wrap">
+      <div class="dark-panel" style="padding: clamp(40px, 6vw, 80px) clamp(24px, 5vw, 64px); text-align: center;">
+        <p class="kicker kicker--on-dark">Free trial</p>
+        <h2 id="cta-h" class="mt-4">Try before you pay a cent</h2>
+        <p class="mt-4" style="font-size: 20px;">Join the free trial, test every channel and feature, then pick the IPTV subscription that fits. Setup takes five minutes.</p>
+        <p class="mt-6 flex flex-wrap justify-center" style="gap: 12px;">
+          <a class="btn btn-white" href="/contact/">Start free trial</a>
+          <a class="btn btn-ghost--blue" href="/contact/" style="border-width: 1px; border-style: solid;">Contact us</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest guides (renders only when ≥1 article exists; silent today) -->
+  <LatestGuides />
+</BaseLayout>

@@ -1,0 +1,29 @@
+---
+import { getCollection, render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+
+// Pre-rendered per published, indexable post. With zero posts this generates
+// zero pages (no empty /blog/ shells, no orphan URLs). Drafts/noindex excluded.
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft && !data.noindex);
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const all = await getCollection('blog', ({ data }) => !data.draft && !data.noindex);
+const related = all
+  .filter(
+    (p) =>
+      p.data.slug !== post.data.slug &&
+      (post.data.relatedSlugs.includes(p.data.slug) || p.data.cluster === post.data.cluster),
+  )
+  .slice(0, 3);
+const { Content } = await render(post);
+---
+
+<ArticleLayout post={post} related={related}>
+  <Content />
+</ArticleLayout>

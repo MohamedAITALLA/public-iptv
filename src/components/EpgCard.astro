@@ -1,0 +1,40 @@
+---
+// Product UI mockup: pure HTML/CSS channel-guide card in the productivity-dialect
+// visual language — white surface, bone hairlines, status pills. Generic placeholder
+// program titles only. All actions are real links (nothing decorative is clickable).
+interface Props {
+  label?: string;
+}
+const { label } = Astro.props;
+const rows = [
+  { time: '18:00', title: 'Evening News', tag: 'News', live: true },
+  { time: '19:30', title: 'Live Match', tag: 'Sports', live: true },
+  { time: '21:00', title: 'Family Movie', tag: 'Movies', live: false },
+  { time: '22:45', title: 'Night Documentary', tag: 'Docs', live: false },
+];
+---
+
+<div class="card card--large" style="padding: 20px; box-shadow: var(--shadow-subtle);">
+  <div class="flex items-center justify-between mb-4">
+    <span class="pill pill--violet">TV Guide</span>
+    <span style="font-size: 12px; color: var(--color-slate);">Today</span>
+  </div>
+  <ul class="flex flex-col" style="gap: 8px; list-style: none; padding: 0; margin: 0;">
+    {
+      rows.map((r) => (
+        <li
+          class="flex items-center gap-3"
+          style={`border-radius: 12px; padding: 10px 12px; ${r.live ? 'background: var(--color-mist); border: 1px solid var(--color-bone);' : 'border: 1px solid transparent;'}`}
+        >
+          <span style="font-size: 12px; color: var(--color-slate); min-width: 44px; font-family: var(--font-sometype-mono);">{r.time}</span>
+          <span style="font-weight: 600; font-size: 15px; font-family: var(--font-jakarta);">{r.title}</span>
+          <span style="margin-left: auto;">{r.live ? <span class="pill--live">● LIVE</span> : <span style="font-size: 12px; color: var(--color-slate);">{r.tag}</span>}</span>
+        </li>
+      ))
+    }
+  </ul>
+  <div class="mt-4 flex gap-2 items-center">
+    <a class="btn btn-dark" style="font-size: 14px; min-height: 40px; padding: 10px 20px;" href="/contact/">Watch now</a>
+    <a class="pill" href="/contact/">Browse guide</a>
+  </div>
+</div>

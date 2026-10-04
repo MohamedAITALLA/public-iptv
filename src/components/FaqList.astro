@@ -1,0 +1,24 @@
+---
+import type { Faq } from '../data/faq';
+interface Props {
+  faqs: Faq[];
+}
+const { faqs } = Astro.props;
+---
+
+<div>
+  {
+    faqs.map((f) => (
+      <details class="acc-row" name="home-faq">
+        <summary>
+          <svg class="acc-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"></circle>
+            <path d="M10 6.5v7M6.5 10h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+          </svg>
+          <span>{f.q}</span>
+        </summary>
+        <p class="acc-body">{f.a}</p>
+      </details>
+    ))
+  }
+</div>

@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { DOMAIN } from '../data/site';
+---
+
+<BaseLayout
+  title="Contact & Support | Public IPTV"
+  description="Contact Public IPTV support for free trials, subscriptions and setup help. We answer every message personally."
+  canonical={`${DOMAIN}/contact/`}
+>
+  <section class="section" aria-labelledby="contact-h">
+    <div class="wrap" style="max-width: 640px;">
+      <div class="section-head">
+        <p class="kicker">Support</p>
+        <h1 id="contact-h" style="font-size: clamp(34px, 5vw, 60px);">Contact &amp; support</h1>
+        <p class="lead">Trial requests, subscription questions and setup help — include your device type for the fastest answer.</p>
+      </div>
+      <div class="card">
+        <h2 style="font-size: 24px;">WhatsApp — fastest for trials</h2>
+        <p class="mt-2" style="font-size: 18px; font-weight: 700;"><a href="https://wa.me/212641861979" rel="noopener">+212 641-861979</a></p>
+        <p class="mt-2" style="color: var(--color-slate);">Message us on WhatsApp for trial access and setup help. Mention your device and how many screens you watch on.</p>
+      </div>
+      <div class="card mt-4">
+        <h2 style="font-size: 24px;">Email us</h2>
+        <p class="mt-2" style="font-size: 18px; font-weight: 700;">contact@public-iptv.online</p>
+        <p class="mt-2" style="color: var(--color-slate);">We answer every message personally. For trial access, mention your device and how many screens you watch on.</p>
+      </div>
+      <div class="card card--tint mt-4">
+        <h2 style="font-size: 24px;">Rights &amp; takedown requests</h2>
+        <p class="mt-2" style="color: var(--color-slate);">
+          Rights holders can report concerns to the address above with the subject
+          “Takedown”. Include the specific URL, proof of ownership and contact
+          details so we can act promptly.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

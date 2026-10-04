@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+// Renders ONLY when at least one published, indexable article exists.
+const posts = (await getCollection('blog', ({ data }) => !data.draft && !data.noindex))
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .slice(0, 3);
+---
+
+{posts.length > 0 && (
+  <section class="section" aria-labelledby="guides-h">
+    <div class="wrap">
+      <div class="section-head section-head--center">
+        <p class="kicker">Knowledge base</p>
+        <h2 id="guides-h">Latest guides</h2>
+        <p class="lead">Practical setup and viewing guides from our team.</p>
+      </div>
+      <div class="grid gap-6 md:grid-cols-3">
+        {posts.map((p) => (
+          <article class="card">
+            <h3><a href={`/blog/${p.data.slug}/`}>{p.data.title}</a></h3>
+            <p class="mt-2" style="color: var(--color-slate);">{p.data.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

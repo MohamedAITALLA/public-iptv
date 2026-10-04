@@ -1,0 +1,15 @@
+---
+interface Props {
+  kicker?: string;
+  title: string;
+  sub?: string;
+  center?: boolean;
+}
+const { kicker, title, sub, center = false } = Astro.props;
+---
+
+<div class={`section-head${center ? ' section-head--center' : ''}`}>
+  {kicker && <p class="kicker">{kicker}</p>}
+  <h2 class="mt-4">{title}</h2>
+  {sub && <p class="lead">{sub}</p>}
+</div>

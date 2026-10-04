@@ -1,0 +1,170 @@
+---
+import { SITE_NAME, DOMAIN, LOCALE, TITLE as DEFAULT_TITLE, DESCRIPTION as DEFAULT_DESC } from '../data/site';
+import '../styles/tokens.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  extraSchemas?: object[];
+  noindexPage?: boolean;
+  hasGuides?: boolean;
+}
+
+const {
+  title = DEFAULT_TITLE,
+  description = DEFAULT_DESC,
+  canonical = `${DOMAIN}/`,
+  ogImage = `${DOMAIN}/og-image.png`,
+  extraSchemas = [],
+  noindexPage = false,
+  hasGuides = false,
+} = Astro.props;
+
+const staging = import.meta.env.PUBLIC_INDEXING === 'staging';
+const robots = staging || noindexPage ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
+
+const graph: Record<string, unknown>[] = [
+  {
+    '@type': 'Organization',
+    '@id': `${DOMAIN}/#organization`,
+    name: SITE_NAME,
+    url: DOMAIN,
+    logo: { '@type': 'ImageObject', url: `${DOMAIN}/apple-touch-icon.png`, width: 180, height: 180 },
+    contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', email: 'contact@public-iptv.online', telephone: '+212641861979' },
+  },
+  {
+    '@type': 'WebSite',
+    '@id': `${DOMAIN}/#website`,
+    name: SITE_NAME,
+    url: DOMAIN,
+    publisher: { '@id': `${DOMAIN}/#organization` },
+  },
+  {
+    '@type': 'WebPage',
+    '@id': `${canonical}#webpage`,
+    url: canonical,
+    name: title,
+    description,
+    isPartOf: { '@id': `${DOMAIN}/#website` },
+    about: { '@id': `${DOMAIN}/#organization` },
+    inLanguage: LOCALE,
+  },
+];
+for (const extra of extraSchemas) graph.push(extra as Record<string, unknown>);
+const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
+---
+
+<!doctype html>
+<html lang={LOCALE}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content={robots} />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link
+      rel="preload"
+      href="/fonts/plus-jakarta-sans-latin-wght-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="sticky top-0 z-50" style="background: var(--color-signal-white); border-bottom: 1px solid var(--color-bone);">
+      <nav class="wrap flex items-center justify-between gap-4" style="min-height: 64px;" aria-label="Primary">
+        <a href="/" class="flex items-center gap-2" style="font-family: var(--font-jakarta); font-weight: 800; font-size: 20px; letter-spacing: -0.02em;" aria-label="Public IPTV home">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <rect width="28" height="28" rx="14" fill="#202020"></rect>
+            <path d="M11 9.5v9l7.5-4.5L11 9.5z" fill="#fff"></path>
+            <path d="M6.5 18.5a8 8 0 0 1 0-9" stroke="#0091ff" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+          <span>Public&nbsp;IPTV</span>
+        </a>
+        <div class="hidden md:flex items-center gap-2" style="font-size: 14px; font-weight: 500;">
+          <a href="/#features" class="pill" style="border-color: transparent;">Features</a>
+          <a href="/#devices" class="pill" style="border-color: transparent;">Devices</a>
+          <a href="/#faq" class="pill" style="border-color: transparent;">FAQ</a>
+          {hasGuides && <a href="/blog/" class="pill" style="border-color: transparent;">Guides</a>}
+        </div>
+        <div class="hidden md:flex items-center gap-3">
+          <a class="btn btn-ghost" href="/contact/">Contact</a>
+          <a class="btn btn-dark" href="/contact/">Start free trial</a>
+        </div>
+      </nav>
+      <nav class="wrap md:hidden flex items-center" style="gap: 8px; padding-bottom: 12px; overflow-x: auto;" aria-label="Mobile">
+        <a href="/#features" class="pill" style="border-color: transparent; white-space: nowrap;">Features</a>
+        <a href="/#devices" class="pill" style="border-color: transparent; white-space: nowrap;">Devices</a>
+        <a href="/#faq" class="pill" style="border-color: transparent; white-space: nowrap;">FAQ</a>
+        {hasGuides && <a href="/blog/" class="pill" style="border-color: transparent; white-space: nowrap;">Guides</a>}
+        <a href="/contact/" class="pill" style="border-color: transparent; white-space: nowrap;">Contact</a>
+        <a class="btn btn-dark" href="/contact/" style="white-space: nowrap;">Start free trial</a>
+      </nav>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer style="border-top: 1px solid var(--color-bone);">
+      <div class="wrap" style="padding-block: 48px;">
+        <div class="grid gap-8 md:grid-cols-4">
+          <div>
+            <p style="font-family: var(--font-jakarta); font-weight: 800; font-size: 18px;">Public IPTV</p>
+            <p class="mt-2" style="color: var(--color-slate); font-size: 14px;">
+              Premium IPTV subscriptions with a free trial, honest billing and human support.
+            </p>
+          </div>
+          <nav aria-label="Product">
+            <p class="kicker">Product</p>
+            <ul class="mt-3 space-y-2" style="font-size: 14px; font-weight: 500;">
+              <li><a href="/#features">Features</a></li>
+              <li><a href="/#devices">Devices</a></li>
+              <li><a href="/#faq">FAQ</a></li>
+            </ul>
+          </nav>
+          <nav aria-label="Legal">
+            <p class="kicker">Legal</p>
+            <ul class="mt-3 space-y-2" style="font-size: 14px; font-weight: 500;">
+              <li><a href="/privacy/">Privacy Policy</a></li>
+              <li><a href="/terms/">Terms of Service</a></li>
+              <li><a href="/refund/">Refund Policy</a></li>
+              <li><a href="/contact/">Contact</a></li>
+            </ul>
+          </nav>
+          <div>
+            <p class="kicker">Support</p>
+            <p class="mt-3" style="font-size: 14px; font-weight: 500;">contact@public-iptv.online</p>
+            <p class="mt-2" style="color: var(--color-slate); font-size: 14px;">We answer every message personally.</p>
+          </div>
+        </div>
+        <div class="mt-8 pt-6 flex flex-col md:flex-row justify-between gap-2" style="border-top: 1px solid var(--color-bone); font-size: 14px; color: var(--color-slate);">
+          <p>© 2026 Public IPTV. All rights reserved.</p>
+          <p>Please read our terms before subscribing.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+# Public IPTV — public-iptv.online
+
+> Short factual site summary for LLM/crawler consumers (experimental, low priority).
+
+Public IPTV (https://public-iptv.online) offers premium IPTV subscriptions for
+worldwide English-speaking viewers, starting with a free trial. Plans cover live
+TV categories (sports, movies, news, kids, international), premium 4K/HD quality,
+multi-device viewing via any compatible M3U playlist player, and human support.
+
+- Home: https://public-iptv.online/
+- Plans: https://public-iptv.online/#plans
+- FAQ: https://public-iptv.online/#faq
+- Contact: https://public-iptv.online/contact/
+- Sitemap: https://public-iptv.online/sitemap.xml

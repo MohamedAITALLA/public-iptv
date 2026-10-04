@@ -1,0 +1,428 @@
+@import "tailwindcss";
+
+@theme {
+  /* ClickUp-style productivity system (adapted — see docs/seo-decisions.md §17) */
+  --color-signal-white: #ffffff;
+  --color-ink-black: #202020;
+  --color-onyx: #090c1d;
+  --color-carbon: #2a2a2a;
+  --color-slate: #646464;
+  --color-ash: #838383;
+  --color-fog: #b3b3b3;
+  --color-cloud: #d4d4d4;
+  --color-bone: #e8e8e8;
+  --color-mist: #f8f9fa;
+  --color-plaster: #e9ebf0;
+  --color-mercury: #eeeeee;
+  --color-brand-violet: #6647f0;
+  --color-signal-blue: #0091ff;
+  --color-mint: #6ee7b7;
+  --color-emerald: #00c07a;
+  --color-teal-tag: #16c0a4;
+
+  --font-jakarta: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-inter: "Inter", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sometype-mono: "Sometype Mono", ui-monospace, SFMono-Regular, Menlo,
+    Monaco, Consolas, monospace;
+
+  --shadow-subtle: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
+  --shadow-sm: rgba(13, 21, 48, 0.04) 0px 4px 4px 0px;
+}
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/fonts/plus-jakarta-sans-latin-wght-normal.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter-latin-wght-normal.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sometype Mono";
+  src: url("/fonts/sometype-mono-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sometype Mono";
+  src: url("/fonts/sometype-mono-latin-500-normal.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-signal-white);
+  color: var(--color-ink-black);
+  font-family: var(--font-inter);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Display type: Jakarta, heavy, tight tracking */
+h1,
+h2,
+h3 {
+  font-family: var(--font-jakarta);
+  color: var(--color-ink-black);
+  letter-spacing: -0.04em;
+}
+
+h1 {
+  font-weight: 800;
+  font-size: clamp(42px, 6vw, 80px);
+  line-height: 1.05;
+}
+
+h2 {
+  font-weight: 700;
+  font-size: clamp(34px, 4.6vw, 60px);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+
+h3 {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+/* Mono kicker labels: 12px uppercase, wide tracking, slate for AA contrast.
+   (Skill suggests ash; slate chosen so 12px text passes WCAG AA — see decisions.) */
+.kicker {
+  font-family: var(--font-sometype-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-slate);
+}
+
+.kicker--on-dark {
+  color: var(--color-fog);
+}
+
+/* Layout: 1200px container, 80px section rhythm */
+.wrap {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.section {
+  padding-block: 80px;
+}
+
+.section-band {
+  background: var(--color-plaster);
+}
+
+.section-head {
+  max-width: 720px;
+  margin-bottom: 48px;
+}
+
+.section-head--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.section-head p.lead {
+  color: var(--color-slate);
+  font-size: 20px;
+  margin-top: 16px;
+}
+
+/* Buttons: 9999px pills everywhere. Dark fill = primary action. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 12px 24px;
+  border-radius: 9999px;
+  font-family: var(--font-jakarta);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-dark {
+  background: var(--color-ink-black);
+  color: #fff;
+}
+
+.btn-dark:hover {
+  transform: translateY(-1px);
+}
+
+.btn-white {
+  background: #fff;
+  color: var(--color-ink-black);
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: var(--color-bone);
+  color: var(--color-ink-black);
+}
+
+.btn-ghost--blue {
+  border-color: var(--color-signal-blue);
+  color: var(--color-signal-blue);
+}
+
+/* Pills: tags, status, badges — 9999px */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 9999px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  border: 1px solid var(--color-bone);
+  background: var(--color-signal-white);
+  color: var(--color-ink-black);
+}
+
+.pill--violet {
+  border-color: transparent;
+  background: var(--color-mercury);
+  color: var(--color-brand-violet);
+}
+
+.pill--blue {
+  border-color: var(--color-signal-blue);
+  color: var(--color-signal-blue);
+  background: transparent;
+}
+
+.pill--done {
+  background: var(--color-mint);
+  border-color: transparent;
+  color: var(--color-ink-black);
+  padding: 3px 9px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pill--live {
+  background: var(--color-signal-blue);
+  border-color: transparent;
+  color: #fff;
+  padding: 3px 9px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Cards: flat, 1px bone borders, 12px radius (20px large) */
+.card {
+  background: var(--color-signal-white);
+  border: 1px solid var(--color-bone);
+  border-radius: 12px;
+  padding: 28px;
+}
+
+.card--tint {
+  background: var(--color-mist);
+}
+
+.card--large {
+  border-radius: 20px;
+}
+
+.dark-panel {
+  background: linear-gradient(rgb(17, 17, 17) 24%, rgb(0, 0, 0));
+  border-radius: 20px;
+  color: #fff;
+}
+
+.dark-panel h2,
+.dark-panel h3 {
+  color: #fff;
+}
+
+.dark-panel p {
+  color: var(--color-fog);
+}
+
+/* Cards keep dark text even inside dark panels */
+.dark-panel .card {
+  color: var(--color-ink-black);
+}
+
+.dark-panel .card .kicker {
+  color: var(--color-slate);
+}
+
+/* Accordion rows (features + native FAQ details) */
+.acc-row {
+  border-bottom: 1px solid var(--color-bone);
+  padding-block: 16px;
+}
+
+.acc-row summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-jakarta);
+  font-weight: 700;
+  font-size: 18px;
+  min-height: 44px;
+  color: var(--color-ink-black);
+}
+
+.acc-row summary::-webkit-details-marker {
+  display: none;
+}
+
+.acc-row summary .acc-icon {
+  color: var(--color-signal-blue);
+  flex-shrink: 0;
+}
+
+.acc-row .acc-body {
+  color: var(--color-slate);
+  padding-top: 8px;
+  max-width: 70ch;
+}
+
+/* Checkmark list items */
+.check-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 16px;
+}
+
+.check-list li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.check-list .check {
+  color: var(--color-signal-blue);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.check-list strong {
+  color: var(--color-ink-black);
+}
+
+.check-list span {
+  color: var(--color-slate);
+}
+
+/* Conic-gradient border: ONE hero element per page. Static gradient when
+   reduced motion is preferred. */
+.conic-ring {
+  position: relative;
+  border-radius: 9999px;
+  padding: 2px;
+  background: conic-gradient(
+    from 90deg,
+    rgb(125, 91, 231) 19%,
+    rgb(188, 63, 218) 28%,
+    rgb(250, 36, 206) 37%,
+    rgb(251, 73, 165) 45%,
+    rgb(252, 109, 123) 52%,
+    rgb(253, 132, 97) 55%,
+    rgb(253, 154, 70) 58%,
+    rgb(246, 135, 198) 65%,
+    rgb(163, 160, 224) 80%,
+    rgb(79, 185, 250) 95%,
+    rgb(0, 145, 255) 100%
+  );
+}
+
+.conic-ring > .btn {
+  border: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .conic-ring {
+    animation: conic-spin 0.45s linear infinite;
+  }
+  @keyframes conic-spin {
+    to {
+      filter: hue-rotate(360deg);
+    }
+  }
+}
+
+/* Stat callouts */
+.stat-num {
+  font-family: var(--font-jakarta);
+  font-weight: 700;
+  font-size: clamp(48px, 5vw, 60px);
+  letter-spacing: -0.04em;
+  color: var(--color-onyx);
+  line-height: 1;
+}
+
+.stat-cap {
+  color: var(--color-slate);
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+/* Accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-signal-blue);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--color-ink-black);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 0 0 8px 0;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

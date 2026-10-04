@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { DOMAIN } from '../data/site';
+
+interface Props {
+  title: string;
+  heading: string;
+  description: string;
+}
+const { title, heading, description } = Astro.props;
+const path = Astro.url.pathname;
+---
+
+<BaseLayout title={`${title} | Public IPTV`} description={description} canonical={`${DOMAIN}${path}`}>
+  <section class="section" aria-labelledby="legal-h">
+    <div class="wrap" style="max-width: 760px;">
+      <p class="kicker">Legal</p>
+      <h1 id="legal-h" class="mt-4" style="font-size: clamp(38px, 5vw, 60px);">{heading}</h1>
+      <div class="mt-6 flex flex-col gap-4" style="color: var(--color-slate);">
+        <slot />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

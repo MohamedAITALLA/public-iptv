@@ -1,0 +1,14 @@
+# Security + performance headers (Netlify/Cloudflare-Pages `_headers` format).
+# For Apache/Nginx hosts, translate equivalently (see docs/seo-decisions.md).
+# STAGING/PREVIEW deploys must ALSO send `X-Robots-Tag: noindex` (via the host's
+# deploy-context config, NOT this file) plus build with PUBLIC_INDEXING=staging.
+# Production deploys MUST NOT send X-Robots-Tag.
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

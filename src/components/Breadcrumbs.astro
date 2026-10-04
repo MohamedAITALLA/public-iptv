@@ -1,0 +1,23 @@
+---
+// Breadcrumb component + BreadcrumbList data. Ready for future article/pillar
+// pages; intentionally NOT rendered on the home page.
+interface Crumb {
+  name: string;
+  url: string;
+}
+interface Props {
+  trail: Crumb[];
+}
+const { trail } = Astro.props;
+---
+
+<nav aria-label="Breadcrumb">
+  <ol class="flex flex-wrap gap-2" style="font-size: 14px;">
+    {trail.map((c, i) => (
+      <li class="flex items-center gap-2">
+        {i > 0 && <span aria-hidden="true" style="color: var(--color-mist-gray);">/</span>}
+        {i < trail.length - 1 ? <a href={c.url}>{c.name}</a> : <span aria-current="page">{c.name}</span>}
+      </li>
+    ))}
+  </ol>
+</nav>
